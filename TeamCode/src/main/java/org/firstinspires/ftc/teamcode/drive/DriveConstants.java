@@ -22,7 +22,7 @@ public class DriveConstants {
     /*
      * These are motor constants that should be listed online for your motors.
      */
-    public static final double TICKS_PER_REV = 383.6;
+    public static final double TICKS_PER_REV = 384.5f;
     public static final double MAX_RPM = 435;
 
     /*
@@ -33,7 +33,7 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = true;
+    public static final boolean RUN_USING_ENCODER = false;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
@@ -87,10 +87,10 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
 
      */
-    public static double MAX_VEL = 73.17330064499293;
-    public static double MAX_ACCEL = 73.17330064499293;
-    public static double MAX_ANG_VEL = Math.toRadians(349.376775);
-    public static double MAX_ANG_ACCEL = Math.toRadians(349.376775);
+    public static double MAX_VEL = 70;
+    public static double MAX_ACCEL = 70;
+    public static double MAX_ANG_VEL = 5.8f;
+    public static double MAX_ANG_ACCEL = 5.8f;
 
 
     public static double encoderTicksToInches(double ticks) {
