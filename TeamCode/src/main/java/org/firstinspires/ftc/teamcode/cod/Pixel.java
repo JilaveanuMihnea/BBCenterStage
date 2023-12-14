@@ -18,10 +18,10 @@ public class Pixel extends OpMode {
     }
 
     private static final String[] LABELS = {
-            "Pixel",
+            "blue_prop",
     };
 
-    private static final String TFOD_MODEL_ASSET = "CenterStage.tflite";
+    private static final String TFOD_MODEL_ASSET = "blueprop.tflite";
     TfodProcessor tfod;
     public void init(){
         initTfod();
