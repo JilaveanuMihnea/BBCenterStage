@@ -18,10 +18,10 @@ public class Pixel extends OpMode {
     }
 
     private static final String[] LABELS = {
-            "blue_prop",
+            "blue_tear",
     };
 
-    private static final String TFOD_MODEL_ASSET = "blueprop.tflite";
+    private static final String TFOD_MODEL_ASSET = "bluetear.tflite";
     TfodProcessor tfod;
     public void init(){
         initTfod();
@@ -44,7 +44,7 @@ public class Pixel extends OpMode {
 
 
 // Choose a camera resolution. Not all cameras support all resolutions.
-        builder.setCameraResolution(new Size(640, 480));
+        builder.setCameraResolution(new Size(1280, 720));
 
 // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
         builder.enableLiveView(true);

@@ -39,8 +39,8 @@ public class Test extends OpMode {
 
         movement(forward, strafe, rotation);
         sliderManual(gamepad2.right_trigger, gamepad2.left_trigger);
-        tagaManual(gamepad2.right_bumper, gamepad2.left_bumper);
-
+       tagaManual(gamepad2.right_bumper, gamepad2.left_bumper);
+       // tagaPaca(gamepad2.a, gamepad2.b);
         telemetry.addData("Servo angle",hardware.analogInput.getVoltage() / 3.3 * 360);
         telemetry.update();
     }
@@ -50,9 +50,9 @@ public class Test extends OpMode {
         double[] power = new double[4];
         rotation *= -1;
         power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
-        power[1] = (+forward + strafe + rotation) * (-Spec.MOVEMENT_SPEED);   //-
+        power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
         power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
-        power[3] = (+forward - strafe + rotation) * (-Spec.MOVEMENT_SPEED);   //+
+        power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
         // applying the power
         for (int i = 0; i < 4; i++) {
             hardware.motor[i].setPower(power[i]);
@@ -95,9 +95,16 @@ public class Test extends OpMode {
         if(hardware.tagaMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
             hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        hardware.tagaMotor.setPower(((up?1:0)-(down?1:0))*Spec.TAGA_SPEED);
-    }
+        else if(up) hardware.tagaMotor.setPower(Spec.TAGA_SPEED);
+        else if (down) hardware.tagaMotor.setPower(-Spec.TAGA_SPEED);
+        else hardware.tagaMotor.setPower(0);
 
+    }
+    private void tagaPaca(boolean up, boolean down){
+        if(hardware.tagaMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+            hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
     private void tagaAuto(int ticks){
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

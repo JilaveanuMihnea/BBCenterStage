@@ -36,7 +36,7 @@ public class AlbastruBackstage extends LinearOpMode {
                 .build();
 
         traj1 = drive.trajectoryBuilder(traj0.end())
-                .lineToLinearHeading(new Pose2d(46, 32, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(36, 32, Math.toRadians(0)))
                 .build();
 
         traj2 = drive.trajectoryBuilder(traj1.end())
