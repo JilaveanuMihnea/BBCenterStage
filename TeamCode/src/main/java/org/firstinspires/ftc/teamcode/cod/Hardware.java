@@ -52,12 +52,18 @@ public class Hardware {
     }
     private void initMotors() {
         motor[0] = setDefaultStateMotor(motor[0], "mFrontRight", DcMotorSimple.Direction.FORWARD); //0
-        motor[1] = setDefaultStateMotor(motor[1], "mFrontLeft", DcMotorSimple.Direction.FORWARD); //1
+        motor[1] = setDefaultStateMotor(motor[1], "mFrontLeft", DcMotorSimple.Direction.REVERSE); //1
         motor[2] = setDefaultStateMotor(motor[2], "mBackRight", DcMotorSimple.Direction.FORWARD); //2
-        motor[3] = setDefaultStateMotor(motor[3], "mBackLeft", DcMotorSimple.Direction.FORWARD); //3
+        motor[3] = setDefaultStateMotor(motor[3], "mBackLeft", DcMotorSimple.Direction.REVERSE); //3
 
         sliderMotor = hardwareMap.get(DcMotor.class, "sliderMotor");
+        sliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sliderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         tagaMotor = hardwareMap.get(DcMotor.class, "tagaMotor");
+        tagaMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        tagaMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        tagaMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     private void initServos(){

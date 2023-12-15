@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.cod;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test", group="Version1")
@@ -49,9 +50,9 @@ public class Test extends OpMode {
         double[] power = new double[4];
         rotation *= -1;
         power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
-        power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
+        power[1] = (+forward + strafe + rotation) * (-Spec.MOVEMENT_SPEED);   //-
         power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
-        power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
+        power[3] = (+forward - strafe + rotation) * (-Spec.MOVEMENT_SPEED);   //+
         // applying the power
         for (int i = 0; i < 4; i++) {
             hardware.motor[i].setPower(power[i]);
@@ -78,34 +79,45 @@ public class Test extends OpMode {
     }
 
     private void sliderManual(float up, float down){
+        if(hardware.sliderMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+            hardware.sliderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
         hardware.sliderMotor.setPower((up-down)*Spec.SLIDER_SPEED);
     }
 
-    private void sliderAuto(){
-
+    private void sliderAuto(int ticks){
+        hardware.sliderMotor.setTargetPosition(ticks);
+        hardware.sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hardware.sliderMotor.setPower(Spec.SLIDER_SPEED);
     }
 
     private void tagaManual(boolean up, boolean down){
+        if(hardware.tagaMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+            hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
         hardware.tagaMotor.setPower(((up?1:0)-(down?1:0))*Spec.TAGA_SPEED);
     }
 
-    private void tagaAuto(){
-
+    private void tagaAuto(int ticks){
+        hardware.tagaMotor.setTargetPosition(ticks);
+        hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hardware.tagaMotor.setPower(Spec.SLIDER_SPEED);
     }
 
-    private void clawHold(){
 
+    private void clawHold(){
+        //todo align claw with backdrop angle when tagamotorstate = up
     }
 
     private void clawMonkey(){
 
     }
 
-    private void drone(){
+    private void drone(boolean button){
 
     }
 
-    private void pull(){
+    private void pull(boolean button){
 
     }
 
