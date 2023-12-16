@@ -13,7 +13,7 @@ public class Hardware {
     public DcMotor[] motor = new DcMotor[4];
     public DcMotor sliderMotor, tagaMotor;
 
-    public Servo clawServoRight, clawServoLeft, clawServoHold, droneServo;
+    public Servo clawServoRight, clawServoLeft, clawServoHold, droneServo, droneAdjustServo;
 
     public AnalogInput analogInput;
 
@@ -57,6 +57,7 @@ public class Hardware {
         motor[3] = setDefaultStateMotor(motor[3], "mBackLeft", DcMotorSimple.Direction.FORWARD); //3
 
         sliderMotor = hardwareMap.get(DcMotor.class, "sliderMotor");
+        sliderMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         sliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         sliderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -72,6 +73,7 @@ public class Hardware {
         clawServoLeft = hardwareMap.get(Servo.class, "clawServoLeft");
         clawServoHold = hardwareMap.get(Servo.class, "clawServoHold");
         droneServo = hardwareMap.get(Servo.class, "droneServo");
+        droneAdjustServo = hardwareMap.get(Servo.class, "droneAdjustServo");
     }
 
     private void initAnal(){

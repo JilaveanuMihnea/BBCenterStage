@@ -8,6 +8,9 @@ import android.util.Size;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -20,23 +23,28 @@ import java.util.List;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Schelet", group="Version1")
 @Disabled
-public abstract class Schelet extends OpMode {
+public abstract class Schelet extends LinearOpMode {
+    Hardware hardware;
+    protected ElapsedTime runTime = new ElapsedTime();
+
     public java.util.List<Recognition> getRecognitions() {
         return null;
     }
 
     private static final String[] LABELS = {
-            "Pixel",
+            "blue_tear",
     };
 
-    private static final String TFOD_MODEL_ASSET = "CenterStage.tflite";
+    private static final String TFOD_MODEL_ASSET = "bluetear.tflite";
     TfodProcessor tfod;
-    public void init(){
-        initTfod();
-    }
 
-    public void loop(){
-        telemetryTfod();
+    protected void init_auto()
+    {
+        hardware = new Hardware(hardwareMap, true);
+        runTime = new ElapsedTime();
+//        hardware.motor[2].setDirection(DcMotorSimple.Direction.REVERSE);
+//        hardware.motor[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        initTfod();
     }
     private void initTfod(){
         tfod = new TfodProcessor.Builder()
@@ -71,7 +79,7 @@ public abstract class Schelet extends OpMode {
 // Build the Vision Portal, using the above settings.
         VisionPortal visionPortal = builder.build();
     }
-    private void telemetryTfod() {
+    protected void telemetryTfod() {
 
         java.util.List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -87,6 +95,19 @@ public abstract class Schelet extends OpMode {
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
+    }
+    protected void sliderAuto(int ticks){
+        hardware.sliderMotor.setTargetPosition(ticks);
+        hardware.sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if(ticks>hardware.sliderMotor.getCurrentPosition())
+            hardware.sliderMotor.setPower(Spec.SLIDER_SPEED_UP);
+        else
+            hardware.sliderMotor.setPower(Spec.SLIDER_SPEED_DOWN);
+    }
+    protected void tagaAuto(int ticks){
+        hardware.tagaMotor.setTargetPosition(ticks);
+        hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hardware.tagaMotor.setPower(Spec.TAGA_SPEED);
     }
 
 }
