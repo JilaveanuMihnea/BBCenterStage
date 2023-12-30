@@ -34,6 +34,7 @@ public class Pixel extends OpMode {
         tfod = new TfodProcessor.Builder()
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
+                .setMaxNumRecognitions(1)
                 .build();
 
         VisionPortal.Builder builder = new VisionPortal.Builder();

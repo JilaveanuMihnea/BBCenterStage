@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.cod;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -14,8 +16,10 @@ public class Hardware {
     public DcMotor sliderMotor, tagaMotor;
 
     public Servo clawServoRight, clawServoLeft, clawServoHold, droneServo, droneAdjustServo;
-
+//    public CRServo servoTest;
     public AnalogInput analogInput;
+
+    public DistanceSensor dsLeft, dsRight;
 
     public BNO055IMU imu;
     public BNO055IMU.Parameters parameters;
@@ -41,13 +45,15 @@ public class Hardware {
 
         initMotors();
         initServos();
-        initSenzors();
+        initSensors();
         initAnal();
         initImu();
     }
 
-    private void initSenzors()
+    private void initSensors()
     {
+        dsLeft = hardwareMap.get(DistanceSensor.class, "dsLeft");
+        dsRight = hardwareMap.get(DistanceSensor.class, "dsRight");
 
     }
     private void initMotors() {
