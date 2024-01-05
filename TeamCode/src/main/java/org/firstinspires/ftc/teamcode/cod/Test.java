@@ -70,28 +70,38 @@ public class Test extends OpMode {
     @Override
     public void loop() {
         //binds
+
+        // china hack controls
+//        float forward = gamepad1.left_stick_y;
+//        float strafe = -gamepad1.right_stick_x;
+//        float lrotation = gamepad1.left_trigger;
+//        float rrotation = gamepad1.right_trigger;
+//        float rotation = rrotation-lrotation;
+
         float forward = gamepad1.left_stick_y;
         float strafe = -gamepad1.left_stick_x;
         float rotation = gamepad1.right_stick_x;
+
         boolean dronelnch = gamepad1.left_bumper;
         boolean droneadj = gamepad1.right_bumper;
 
+        //gp2
         float sliderUp = gamepad2.right_trigger;
         float sliderDown = gamepad2.left_trigger;
-        boolean tagaUp = gamepad2.right_bumper;
-        boolean tagaDown = gamepad2.left_bumper;
-        boolean clawLeft = gamepad2.a;
-        boolean clawRight = gamepad2.b;
+        boolean tagaUp = gamepad2.left_bumper;
+        boolean tagaDown = gamepad2.right_bumper;
+        boolean clawLeft = gamepad2.dpad_left;
+        boolean clawRight = gamepad2.dpad_right;
 
-        boolean grabsqc = gamepad2.dpad_down;
-        boolean placesqc = gamepad2.dpad_up;
+        boolean grabsqc = gamepad2.dpad_up;
+        boolean placesqc = gamepad2.dpad_down;
 
         movement(forward, strafe, rotation);
         timers();
         tagaManual(tagaUp, tagaDown);
         openClaws(clawLeft, clawRight);
         drone(dronelnch, droneadj);
-        sliderBun(gamepad2.right_trigger, gamepad2.left_trigger);
+
 
 
         switch(currentState){
@@ -173,9 +183,12 @@ public class Test extends OpMode {
                     case LOWER:
                         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
                         sliderAuto(0);
+
                         if(Math.abs(hardware.sliderMotor.getCurrentPosition()) < Spec.TAGA_THRESHOLD_LOWER){
                             tagaAuto(0);
 
+                        }else{
+                            tagaAuto(Spec.TAGA_TICK_60DEG);
                         }
                         if(Math.abs(hardware.tagaMotor.getCurrentPosition()) < 50){
                             currentState = STATE_MACHINE.DRIVER_CONTROLLED;
@@ -199,7 +212,7 @@ public class Test extends OpMode {
         // power applied to the robot wheel by wheel
         if(hardware.dsLeft.getDistance(DistanceUnit.CM)<5 || hardware.dsRight.getDistance(DistanceUnit.CM)<5){
             gamepad1.rumble(100);
-            forward = Math.min(0, forward);
+//            forward = Math.min(0, forward);
         }
 
 
@@ -244,7 +257,7 @@ public class Test extends OpMode {
     }
 
     private void sliderBun(float up, float down){
-        if(hardware.sliderMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+        if(hardware.sliderMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION && !hardware.sliderMotor.isBusy()){
             hardware.sliderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         // todo testeaza daca se opreste glisiera jos
@@ -269,12 +282,14 @@ public class Test extends OpMode {
         else if (down) hardware.tagaMotor.setPower(-Spec.TAGA_SPEED);
         else{
             int tagaPos = hardware.tagaMotor.getCurrentPosition();
-            if(tagaPos > 1050) hardware.tagaMotor.setPower(-0.1f);
+            if(tagaPos > 900) hardware.tagaMotor.setPower(-0.001f);
+            else if(tagaPos < 900) hardware.tagaMotor.setPower(0.001f);
             else hardware.tagaMotor.setPower(0f);
         }
 
     }
     private void tagaAuto(int ticks){
+        hardware.tagaMotor.setPower(0f);
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hardware.tagaMotor.setPower(Spec.TAGA_SPEED);

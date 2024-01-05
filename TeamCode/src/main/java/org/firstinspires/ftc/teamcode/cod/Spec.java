@@ -8,9 +8,10 @@ public class Spec {
     public static float MOVEMENT_SPEED = 1f;
 
     //systems speed
-    public static float TAGA_SPEED = 0.7f;
-    public static float SLIDER_SPEED_UP = 0.6f;
-    public static float SLIDER_SPEED_DOWN = 0.3f;
+    public static float TAGA_SPEED = 0.3f;
+    public static float TAGA_SPEED_AUTO = 0.5f;
+    public static float SLIDER_SPEED_UP = 1f;
+    public static float SLIDER_SPEED_DOWN = 0.5f;
 
 
     //systems movement
@@ -28,9 +29,9 @@ public class Spec {
     public static float CLOSED_POS_RIGHT = 0.85f;
     public static float OPENED_POS_RIGHT = 0.5f;
 
-    public static float HOLD_ALIGN = 0.673f;
-    public static float HOLD_PLACE = 0.8f;
-    public static float DRONE_ADJUST = 0.7f; //creste = ridica || 355grade modifica putin !!
+    public static float HOLD_ALIGN = 0.525f; // creste = mai jos
+    public static float HOLD_PLACE = 0.67f;
+    public static float DRONE_ADJUST = 0.65f; //creste = ridica || 355grade modifica putin !!
     public static float DRONE_HOLD = 0.54f;
     public static float DRONE_LAUNCH = 0.35f;
 

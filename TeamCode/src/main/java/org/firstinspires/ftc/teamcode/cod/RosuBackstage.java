@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomy: Albastru backstage", group="Autonomy")
-public class AlbastruBackstage extends ScheletAlbastru {
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomy: Rosu backstage", group="Autonomy")
+public class RosuBackstage extends ScheletRosu {
     ElapsedTime elapsedTime;
 
     boolean edgepark = true;
@@ -17,9 +17,9 @@ public class AlbastruBackstage extends ScheletAlbastru {
     @Override
     public void runOpMode() {
         if(edgepark){
-            xpark = 3f;
+            xpark = 4f;
         }else{
-            xpark = 47f;
+            xpark = 52f;
         }
         init_auto();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -38,19 +38,19 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj1_1 = drive.trajectoryBuilder(traj1_0.end())
-                .lineToLinearHeading(new Pose2d(31, 0, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(31, 0, Math.toRadians(90)))
                 .build();
 
         traj1_2 = drive.trajectoryBuilder(traj1_1.end())
-                .lineToLinearHeading(new Pose2d(33,32.5,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(33,-34,Math.toRadians(90)))
                 .build();
 
         traj1_3 = drive.trajectoryBuilder(traj1_2.end())
-                .lineToLinearHeading(new Pose2d(xpark, 32.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, -34, Math.toRadians(90)))
                 .build();
 
         traj1_4 = drive.trajectoryBuilder(traj1_3.end())
-                .lineToLinearHeading(new Pose2d(xpark, 46, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, -46, Math.toRadians(90)))
                 .build();
 
         //mijloc
@@ -62,43 +62,42 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .lineToLinearHeading(new Pose2d(20, 0, Math.toRadians(0)))
                 .build();
 
-        traj2_2 = drive.trajectoryBuilder(new Pose2d(20, 0, Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(26, 0, Math.toRadians(-90)))
+        traj2_2 = drive.trajectoryBuilder(new Pose2d(20, 0, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(26, 0, Math.toRadians(90)))
                 .build();
 
         traj2_3 = drive.trajectoryBuilder(traj2_2.end())
-                .lineToLinearHeading(new Pose2d(26, 32.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(26, -34, Math.toRadians(90)))
                 .build();
 
         traj2_4 = drive.trajectoryBuilder(traj2_3.end())
-                .lineToLinearHeading(new Pose2d(xpark, 32.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, -34, Math.toRadians(90)))
                 .build();
 
         traj2_5 = drive.trajectoryBuilder(traj2_4.end())
-                .lineToLinearHeading(new Pose2d(xpark, 46, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, -46, Math.toRadians(90)))
                 .build();
 
         //stanga
         traj3_0 = drive.trajectoryBuilder(startPos)
-                .lineToLinearHeading(new Pose2d(20, 12.5, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(20, -13.5, Math.toRadians(0)))
                 .build();
 
         traj3_1 = drive.trajectoryBuilder(traj3_0.end())
-                .lineToLinearHeading(new Pose2d(17, 32.5, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(17, -32, Math.toRadians(0)))
                 .build();
 
-        traj3_2 = drive.trajectoryBuilder(new Pose2d(17, 32.5, Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(18, 32.5, Math.toRadians(-90)))
+        traj3_2 = drive.trajectoryBuilder(new Pose2d(17, -34, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(19, -34, Math.toRadians(90)))
                 .build();
 
         traj3_3 = drive.trajectoryBuilder(traj3_2.end())
-                .lineToLinearHeading(new Pose2d(xpark, 32.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, -34, Math.toRadians(90)))
                 .build();
 
         traj3_4 = drive.trajectoryBuilder(traj3_3.end())
-                .lineToLinearHeading(new Pose2d(xpark, 46, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, -46, Math.toRadians(90)))
                 .build();
-
 
         elapsedTime = new ElapsedTime();
         elapsedTime.reset();
@@ -112,54 +111,14 @@ public class AlbastruBackstage extends ScheletAlbastru {
         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
 
         if(currentRecognitions.size()==0){//caz gen sttanga
-            drive.followTrajectory(traj3_0);
-            hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
-            clawOpenRight();
-            sleep(200);
-            hardware.clawServoHold.setPosition(0.45f);
-            clawOpenRight();
-            drive.followTrajectory(traj3_1);
-            sleep(50);
-            drive.turn(Math.toRadians(-90));
-            sleep(50);
-            drive.followTrajectory(traj3_2);
-            sleep(200);
-            placesqc(Spec.TAGA_PE_SPATE);
-            sleep(50);
-            drive.followTrajectory(traj3_3);
-            sleep(50);
-            drive.followTrajectory(traj3_4);
-        }else if((currentRecognitions.get(0).getLeft()+currentRecognitions.get(0).getRight())/2<650){//caz mijloc
-            drive.followTrajectory(traj2_0);
-            hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
-            clawOpenRight();
-            sleep(200);
-            hardware.clawServoHold.setPosition(0.45f);
-            clawOpenRight();
-            drive.followTrajectory(traj2_1);
-            sleep(50);
-            drive.turn(Math.toRadians(-90));
-            sleep(50);
-            drive.followTrajectory(traj2_2);
-            sleep(50);
-            drive.followTrajectory(traj2_3);
-            sleep(200);
-            placesqc(Spec.TAGA_PE_SPATE);
-            hardware.clawServoHold.setPosition(0.45f);
-            sleep(100);
-            drive.followTrajectory(traj2_4);
-            sleep(50);
-            drive.followTrajectory(traj2_5);
-
-        }else{                                        // dreapta
             drive.followTrajectory(traj1_0);
             hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             drive.followTrajectory(traj1_1);
             sleep(200);
-            clawOpenRight();
+            clawOpenLeft();
             sleep(100);
             hardware.clawServoHold.setPosition(0.45f);
-            clawOpenRight();
+            clawOpenLeft();
             sleep(50);
             drive.followTrajectory(traj1_2);
             sleep(200);
@@ -168,6 +127,47 @@ public class AlbastruBackstage extends ScheletAlbastru {
             drive.followTrajectory(traj1_3);
             sleep(50);
             drive.followTrajectory(traj1_4);
+        }else if((currentRecognitions.get(0).getLeft()+currentRecognitions.get(0).getRight())/2<650){//caz mijloc
+            drive.followTrajectory(traj2_0);
+            hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+            clawOpenLeft();
+            sleep(200);
+            hardware.clawServoHold.setPosition(0.45f);
+            clawOpenLeft();
+            drive.followTrajectory(traj2_1);
+            sleep(50);
+            drive.turn(Math.toRadians(90));
+            sleep(50);
+            drive.followTrajectory(traj2_2);
+            sleep(50);
+            drive.followTrajectory(traj2_3);
+            sleep(200);
+            placesqc(Spec.TAGA_PE_SPATE);
+            hardware.clawServoHold.setPosition(0.45f);
+            sleep(100);
+
+            drive.followTrajectory(traj2_4);
+            sleep(50);
+            drive.followTrajectory(traj2_5);
+
+        }else{                                        // dreapta
+            drive.followTrajectory(traj3_0);
+            hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+            clawOpenLeft();
+            sleep(200);
+            hardware.clawServoHold.setPosition(0.45f);
+            clawOpenLeft();
+            drive.followTrajectory(traj3_1);
+            sleep(50);
+            drive.turn(Math.toRadians(90));
+            sleep(50);
+            drive.followTrajectory(traj3_2);
+            sleep(200);
+            placesqc(Spec.TAGA_PE_SPATE);
+            sleep(50);
+            drive.followTrajectory(traj3_3);
+            sleep(50);
+            drive.followTrajectory(traj3_4);
         }
 
     }

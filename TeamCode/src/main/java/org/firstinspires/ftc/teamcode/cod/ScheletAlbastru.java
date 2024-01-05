@@ -47,7 +47,7 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         runTime = new ElapsedTime();
         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
-        hardware.clawServoHold.setPosition(0);
+        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
         initTfod();
     }
     private void initTfod(){
@@ -112,7 +112,7 @@ public abstract class ScheletAlbastru extends LinearOpMode {
     private void tagaAuto(int ticks, float speed_multi){
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hardware.tagaMotor.setPower(Spec.TAGA_SPEED*speed_multi);
+        hardware.tagaMotor.setPower(Spec.TAGA_SPEED_AUTO*speed_multi);
     }
 
     private void clawOpen(boolean rl){
@@ -146,18 +146,25 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         clawOpenLeft();
     }
 
-    protected void placesqc(){
-        tagaAuto(Spec.TAGA_TICK_60DEG, 0.8f);
-        hardware.clawServoHold.setPosition(0.835f);
-        sleep(2800);
+    protected void placesqc(int ticks){
+        tagaAuto(ticks, 0.4f);
+        sleep(400);
+        hardware.clawServoHold.setPosition(0.67f);
+        sleep(2600);
+        tagaFixativ();
         clawOpenBoth();
         sleep(350);
         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
         clawOpenBoth();
-        tagaAuto(0, 0.5f);
+        tagaAuto(0, 0.8f);
         sleep(1500);
-        sleep(50);
         clawOpenBoth();
+    }
+
+    protected void tagaFixativ(){
+        int tagaPos = hardware.tagaMotor.getCurrentPosition();
+        if(tagaPos >= 900) hardware.tagaMotor.setPower(-0.001f);
+        else if(tagaPos < 900) hardware.tagaMotor.setPower(0.001f);
     }
 
 }
