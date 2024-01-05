@@ -18,17 +18,24 @@ public class Test extends OpMode {
     private boolean clawStateLeft = false;
     private boolean clawStateHold = false;
     private boolean droneState = false;
+    private boolean droneLaunchState = false;
+    private boolean droneAdjustState = false;
 
     private boolean resetA = false;
     private boolean resetB = false;
     private boolean resetsq = false;
     private boolean resetdrone = false;
+    private boolean resetLB = false;
+    private boolean resetRB = false;
+
     private double tmr = 0;
 
     private double lastTimeA;
     private double lastTimeB;
     private double lastTimesq;
     private double lastTimedrone;
+    private double lastTimeLB;
+    private double lastTimeRB;
 
 
     private enum STATE_MACHINE
@@ -314,11 +321,26 @@ public class Test extends OpMode {
 
     private void drone(boolean drnlnch, boolean raise){
         //todo find values
-        if (drnlnch) {
-            hardware.droneServo.setPosition(Spec.DRONE_LAUNCH);
+        if (!resetLB && drnlnch) {
+
+
+            if (droneLaunchState) hardware.droneServo.setPosition(Spec.DRONE_HOLD);
+            else hardware.droneServo.setPosition(Spec.DRONE_LAUNCH);
+
+            resetLB = true;
+            droneLaunchState = !droneLaunchState;
+            lastTimeLB = elapsedTime.milliseconds();
         }
-        if(raise){
-            hardware.droneAdjustServo.setPosition(Spec.DRONE_ADJUST);
+
+        if (!resetRB && raise) {
+
+
+            if (droneAdjustState) hardware.droneAdjustServo.setPosition(Spec.DRONE_ADJUST);
+            else hardware.droneAdjustServo.setPosition(0.59f);
+
+            resetRB = true;
+            droneAdjustState = !droneAdjustState;
+            lastTimeRB = elapsedTime.milliseconds();
         }
 
     }
@@ -339,5 +361,7 @@ public class Test extends OpMode {
         if(resetB && elapsedTime.milliseconds() > lastTimeB + Spec.BUTTON_DELAY) resetB = false;
         if(resetsq && elapsedTime.milliseconds() > lastTimesq + Spec.BUTTON_DELAY) resetsq = false;
         if(resetdrone && elapsedTime.milliseconds() > lastTimedrone + Spec.BUTTON_DELAY) resetdrone = false;
+        if(resetLB && elapsedTime.milliseconds() > lastTimeLB + Spec.BUTTON_DELAY)  resetLB = false;
+        if(resetRB && elapsedTime.milliseconds() > lastTimeRB + Spec.BUTTON_DELAY)  resetRB = false;
     }
 }

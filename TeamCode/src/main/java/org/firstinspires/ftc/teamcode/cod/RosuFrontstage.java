@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomy: Test", group="Autonomy")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomy: Rosu Frontsage", group="Autonomy")
 public class RosuFrontstage extends ScheletRosu{
     ElapsedTime elapsedTime;
     boolean edgepark = false;
@@ -87,7 +87,7 @@ public class RosuFrontstage extends ScheletRosu{
 
         // dreaapta
         traj3_0 = drive.trajectoryBuilder(traj0.end())
-                .lineToLinearHeading(new Pose2d(30 , -2 ,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(30 , 0 ,Math.toRadians(-90)))
                 .build();
 
         traj3_1 = drive.trajectoryBuilder(traj3_0.end())

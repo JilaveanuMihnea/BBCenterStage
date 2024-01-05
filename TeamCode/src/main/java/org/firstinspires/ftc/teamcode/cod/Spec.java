@@ -31,7 +31,7 @@ public class Spec {
 
     public static float HOLD_ALIGN = 0.525f; // creste = mai jos
     public static float HOLD_PLACE = 0.67f;
-    public static float DRONE_ADJUST = 0.65f; //creste = ridica || 355grade modifica putin !!
+    public static float DRONE_ADJUST = 0.68f; //creste = ridica || 355grade modifica putin !!
     public static float DRONE_HOLD = 0.54f;
     public static float DRONE_LAUNCH = 0.35f;
 

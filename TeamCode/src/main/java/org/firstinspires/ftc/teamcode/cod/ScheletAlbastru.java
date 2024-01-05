@@ -47,7 +47,7 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         runTime = new ElapsedTime();
         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
-        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
+//        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
         initTfod();
     }
     private void initTfod(){
