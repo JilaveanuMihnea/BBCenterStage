@@ -330,13 +330,16 @@ public class Test extends OpMode {
     }
 
     private void hangTest(float button1, float button2){
-        if(button1 > 0)
+        if(button1 > 0) {
             hardware.servoTest.setPower(0.3f);
-        else
-            if(button2 > 0)
-                hardware.servoTest.setPower(-0.3f);
-            else
-                hardware.servoTest.setPower(0);
+            hardware.servoTest2.setPower(0.3f);
+        }else if(button2 > 0) {
+            hardware.servoTest.setPower(-0.3f);
+            hardware.servoTest2.setPower(-0.3f);
+        }else {
+            hardware.servoTest.setPower(0f);
+            hardware.servoTest2.setPower(0f);
+        }
     }
 
     private void drone(boolean drnlnch, boolean raise){

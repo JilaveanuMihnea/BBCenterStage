@@ -16,7 +16,7 @@ public class Hardware {
     public DcMotor sliderMotor, tagaMotor;
 
     public Servo clawServoRight, clawServoLeft, clawServoHold, droneServo, droneAdjustServo;
-    public CRServo servoTest;
+    public CRServo servoTest, servoTest2;
     public AnalogInput analogInput;
 
     public DistanceSensor dsLeft, dsRight;
@@ -81,6 +81,7 @@ public class Hardware {
         droneServo = hardwareMap.get(Servo.class, "droneServo");
         droneAdjustServo = hardwareMap.get(Servo.class, "droneAdjustServo");
         servoTest = hardwareMap.get(CRServo.class, "servoTest");
+        servoTest2 = hardwareMap.get(CRServo.class, "servoTest2");
     }
 
     private void initAnal(){
