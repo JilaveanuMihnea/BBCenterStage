@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test", group="Version1")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOP", group="Version1")
 public class Test extends OpMode {
 
     private Hardware hardware;
@@ -108,7 +108,7 @@ public class Test extends OpMode {
         tagaManual(tagaUp, tagaDown);
         openClaws(clawLeft, clawRight);
         drone(dronelnch, droneadj);
-
+        hangTest(gamepad1.right_trigger, gamepad1.left_trigger);
 
 
         switch(currentState){
@@ -221,14 +221,24 @@ public class Test extends OpMode {
             gamepad1.rumble(100);
 //            forward = Math.min(0, forward);
         }
-
-
-        double[] power = new double[4];
-        rotation *= -1;
-        power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
-        power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
-        power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
-        power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
+        double power[];
+        if(gamepad1.a == true){
+            power = new double[4];
+            rotation *= -1;
+            power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //+
+            power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //-
+            power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //-
+            power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //+
+            // applying the power
+        }
+        else {
+            power = new double[4];
+            rotation *= -1;
+            power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
+            power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
+            power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
+            power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED;
+        }//+
         // applying the power
         for (int i = 0; i < 4; i++) {
             hardware.motor[i].setPower(power[i]);
@@ -317,6 +327,16 @@ public class Test extends OpMode {
             clawStateHold = !clawStateHold;
             lastTimesq = elapsedTime.milliseconds();
         }
+    }
+
+    private void hangTest(float button1, float button2){
+        if(button1 > 0)
+            hardware.servoTest.setPower(0.3f);
+        else
+            if(button2 > 0)
+                hardware.servoTest.setPower(-0.3f);
+            else
+                hardware.servoTest.setPower(0);
     }
 
     private void drone(boolean drnlnch, boolean raise){

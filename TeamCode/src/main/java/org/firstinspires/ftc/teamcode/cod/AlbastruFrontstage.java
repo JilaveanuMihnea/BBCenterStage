@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomy: Albastru frontstage", group="Autonomy")
 public class AlbastruFrontstage extends ScheletAlbastru{
     ElapsedTime elapsedTime;
-    boolean edgepark = false;
+    boolean edgepark = false ;
     float xpark;
     @Override
     public void runOpMode(){
@@ -18,7 +18,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
         if(edgepark){
             xpark = 4f;
         }else{
-            xpark = 50.5f;
+            xpark = 49.5f;
         }
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
@@ -48,7 +48,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
                 .build();
 
         traj1_4 = drive.trajectoryBuilder(traj1_3.end())
-                .lineToLinearHeading(new Pose2d(33,80,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(33,79,Math.toRadians(-90)))
                 .build();
 
         traj1_5 = drive.trajectoryBuilder(traj1_4.end())
@@ -73,11 +73,11 @@ public class AlbastruFrontstage extends ScheletAlbastru{
                 .build();
 
         traj2_3 = drive.trajectoryBuilder(traj2_2.end())
-                .lineToLinearHeading(new Pose2d(26, 80.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(26, 80, Math.toRadians(-90)))
                 .build();
 
         traj2_4 = drive.trajectoryBuilder(traj2_3.end()) //stanga-dreapta pe backdrop
-                .lineToLinearHeading(new Pose2d(28, 80.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(28, 80, Math.toRadians(-90)))
                 .build();
 
         traj2_5 = drive.trajectoryBuilder(traj2_4.end())
@@ -110,15 +110,15 @@ public class AlbastruFrontstage extends ScheletAlbastru{
                 .build();
 
         traj3_5 = drive.trajectoryBuilder(traj3_4.end())
-                .lineToLinearHeading(new Pose2d(18, 80.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(22, 79, Math.toRadians(-90)))
                 .build();
 
         traj3_6 = drive.trajectoryBuilder(traj3_5.end())
-                .lineToLinearHeading(new Pose2d(xpark, 80.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark, 79, Math.toRadians(-90)))
                 .build();
 
         traj3_7 = drive.trajectoryBuilder(traj3_6.end())
-                .lineToLinearHeading(new Pose2d(xpark, 92, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(xpark+3, 92, Math.toRadians(-90)))
                 .build();
 
 
@@ -145,9 +145,9 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             clawOpenRight();
             drive.followTrajectory(traj3_2);
             drive.followTrajectory(traj3_3);
-            sleep(50);
+            sleep(6000);
             drive.turn(Math.toRadians(180));
-            sleep(50);
+            sleep(300);
             drive.followTrajectory(traj3_4);
             sleep(50);
             drive.followTrajectory(traj3_5);
@@ -171,9 +171,9 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             drive.turn(Math.toRadians(-90));
             sleep(100);
             drive.followTrajectory(traj2_2);
-            sleep(100);
+            sleep(8500);
             drive.followTrajectory(traj2_3);
-            sleep(50);
+            sleep(300);
             drive.followTrajectory(traj2_4);
             sleep(100);
             placesqc(Spec.TAGA_PE_SPATE);
@@ -196,9 +196,9 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             clawOpenRight();
             sleep(300);
             drive.followTrajectory(traj1_2);
-            sleep(200);
+            sleep(8000);
             drive.followTrajectory(traj1_3);
-            sleep(200);
+            sleep(300);
             drive.followTrajectory(traj1_4);
             sleep(300);
             placesqc(Spec.TAGA_PE_SPATE);

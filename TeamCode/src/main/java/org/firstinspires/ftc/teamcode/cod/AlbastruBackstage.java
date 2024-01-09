@@ -42,7 +42,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj1_2 = drive.trajectoryBuilder(traj1_1.end())
-                .lineToLinearHeading(new Pose2d(33,32.5,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(33,34,Math.toRadians(-90)))
                 .build();
 
         traj1_3 = drive.trajectoryBuilder(traj1_2.end())
@@ -67,7 +67,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj2_3 = drive.trajectoryBuilder(traj2_2.end())
-                .lineToLinearHeading(new Pose2d(27.5, 32.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(25, 34, Math.toRadians(-90)))
                 .build();
 
         traj2_4 = drive.trajectoryBuilder(traj2_3.end())
@@ -88,7 +88,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj3_2 = drive.trajectoryBuilder(new Pose2d(17, 32.5, Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(19.5, 32.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(19.5, 34, Math.toRadians(-90)))
                 .build();
 
         traj3_3 = drive.trajectoryBuilder(traj3_2.end())

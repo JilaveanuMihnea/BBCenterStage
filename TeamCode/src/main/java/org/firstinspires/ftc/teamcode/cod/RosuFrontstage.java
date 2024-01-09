@@ -16,7 +16,7 @@ public class RosuFrontstage extends ScheletRosu{
         if(edgepark){
             xpark = 4f;
         }else{
-            xpark = 52.5f;
+            xpark = 48.5f;
         }
         init_auto();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -49,7 +49,7 @@ public class RosuFrontstage extends ScheletRosu{
                 .build();
 
         traj1_3 = drive.trajectoryBuilder(traj1_2.end())
-                .lineToLinearHeading(new Pose2d(33,-80,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(29,-80,Math.toRadians(90)))
                 .build();
 
         traj1_4 = drive.trajectoryBuilder(traj1_3.end())
@@ -57,7 +57,7 @@ public class RosuFrontstage extends ScheletRosu{
                 .build();
 
         traj1_5 = drive.trajectoryBuilder(traj1_4.end())
-                .lineToLinearHeading(new Pose2d(xpark, -95, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(xpark-1.5, -94, Math.toRadians(90)))
                 .build();
 
 
@@ -75,14 +75,14 @@ public class RosuFrontstage extends ScheletRosu{
                 .build();
 
         traj_ajutor = drive.trajectoryBuilder(traj2_3.end())
-                .lineToLinearHeading(new Pose2d(28, -80, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(24, -80, Math.toRadians(90)))
                 .build();
         traj2_5 = drive.trajectoryBuilder(traj_ajutor.end())
                 .lineToLinearHeading(new Pose2d(xpark, -82, Math.toRadians(90)))
                 .build();
 
         traj2_6 = drive.trajectoryBuilder(traj2_5.end())
-                .lineToLinearHeading(new Pose2d(xpark,-92, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(xpark-1.5,-92, Math.toRadians(90)))
                 .build();
 
         // dreaapta
@@ -104,7 +104,7 @@ public class RosuFrontstage extends ScheletRosu{
                 .build();
 
         traj3_4 = drive.trajectoryBuilder(traj3_3.end())
-                .lineToLinearHeading(new Pose2d(26, -80.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(20.5, -80.5, Math.toRadians(90)))
                 .build();
 
         traj3_5 = drive.trajectoryBuilder(traj3_4.end())
@@ -139,7 +139,7 @@ public class RosuFrontstage extends ScheletRosu{
             clawOpenLeft();
             sleep(300);
             drive.followTrajectory(traj1_1);
-            sleep(200);
+            sleep(3100);
             drive.followTrajectory(traj1_2);
             sleep(200);
             drive.followTrajectory(traj1_3);
@@ -164,7 +164,7 @@ public class RosuFrontstage extends ScheletRosu{
             drive.turn(Math.toRadians(90));
             sleep(50);
             drive.followTrajectory(traj2_2);
-            sleep(50);
+            sleep(3100);
             drive.followTrajectory(traj2_3);
             sleep(50);
             drive.followTrajectory(traj_ajutor);
@@ -194,7 +194,7 @@ public class RosuFrontstage extends ScheletRosu{
             drive.followTrajectory(traj3_2);
             sleep(200);
             drive.turn(Math.toRadians(-180));
-            sleep(200);
+            sleep(3100);
             drive.followTrajectory(traj3_3);
             sleep(200);
             drive.followTrajectory(traj3_4);

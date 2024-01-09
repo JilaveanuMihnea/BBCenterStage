@@ -150,10 +150,10 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         tagaAuto(ticks, 0.4f);
         sleep(400);
         hardware.clawServoHold.setPosition(0.67f);
-        sleep(2600);
+        sleep(2800);
         tagaFixativ();
         clawOpenBoth();
-        sleep(350);
+        sleep(550);
         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
         clawOpenBoth();
         tagaAuto(0, 0.8f);
