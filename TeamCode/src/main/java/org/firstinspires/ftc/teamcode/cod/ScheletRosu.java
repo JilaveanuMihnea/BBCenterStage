@@ -100,7 +100,7 @@ public abstract class ScheletRosu extends LinearOpMode {
         }   // end for() loop
 
     }
-    private void sliderAuto(int ticks){
+    protected void sliderAuto(int ticks){
         hardware.sliderMotor.setTargetPosition(ticks);
         hardware.sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(ticks>hardware.sliderMotor.getCurrentPosition())
@@ -108,7 +108,7 @@ public abstract class ScheletRosu extends LinearOpMode {
         else
             hardware.sliderMotor.setPower(Spec.SLIDER_SPEED_DOWN);
     }
-    private void tagaAuto(int ticks, float speed_multi){
+    protected void tagaAuto(int ticks, float speed_multi){
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hardware.tagaMotor.setPower(Spec.TAGA_SPEED_AUTO*speed_multi);
@@ -144,18 +144,42 @@ public abstract class ScheletRosu extends LinearOpMode {
         clawOpenRight();
         clawOpenLeft();
     }
-
-    protected void placesqc(int ticks){
-        tagaAuto(ticks, 0.4f);
+    protected void stackGrabRed(int ticks){
+        tagaAuto(ticks, 1f);
         sleep(400);
-        hardware.clawServoHold.setPosition(0.67f);
-        sleep(2600);
+        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+        sleep(300);
         tagaFixativ();
         clawOpenBoth();
-        sleep(350);
+        sleep(200);
+        tagaAuto(0, 0.8f);
+    }
+
+    protected void placesqc(int ticks){
+        tagaAuto(ticks, 0.7f);
+        sleep(1000);
+        hardware.clawServoHold.setPosition(Spec.HOLD_PLACE);//+((hardware.tagaMotor.getCurrentPosition()-870)/8.33-30)/355);
+        sleep(600);
+        tagaFixativ();
+        clawOpenBoth();
+        sleep(500);
         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
         clawOpenBoth();
-        tagaAuto(0, 0.8f);
+        tagaAuto(0, 0.5f);
+        sleep(1500);
+        clawOpenBoth();
+    }
+    protected void up(int ticks){
+        tagaAuto(ticks, 1f);
+        sleep(1000);
+        hardware.clawServoHold.setPosition(Spec.HOLD_PLACE);//+((hardware.tagaMotor.getCurrentPosition()-870)/8.33-30)/355);
+        sleep(600);
+        tagaFixativ();
+    }
+    protected void down(){
+        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+        clawOpenBoth();
+        tagaAuto(0, 1f);
         sleep(1500);
         clawOpenBoth();
     }
@@ -165,5 +189,6 @@ public abstract class ScheletRosu extends LinearOpMode {
         if(tagaPos >= 900) hardware.tagaMotor.setPower(-0.001f);
         else if(tagaPos < 900) hardware.tagaMotor.setPower(0.001f);
     }
+
 
 }

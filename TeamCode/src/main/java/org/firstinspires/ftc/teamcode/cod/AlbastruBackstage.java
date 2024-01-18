@@ -19,7 +19,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
         if(edgepark){
             xpark = 3f;
         }else{
-            xpark = 47f;
+            xpark = 49f;
         }
         init_auto();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -38,11 +38,11 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj1_1 = drive.trajectoryBuilder(traj1_0.end())
-                .lineToLinearHeading(new Pose2d(31, 0, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(31, -0.5, Math.toRadians(-90)))
                 .build();
 
         traj1_2 = drive.trajectoryBuilder(traj1_1.end())
-                .lineToLinearHeading(new Pose2d(33,34,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(33,31,Math.toRadians(-90)))
                 .build();
 
         traj1_3 = drive.trajectoryBuilder(traj1_2.end())
@@ -55,7 +55,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
 
         //mijloc
         traj2_0 = drive.trajectoryBuilder(startPos)
-                .lineToLinearHeading(new Pose2d(26, 0, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(27, 0, Math.toRadians(0)))
                 .build();
 
         traj2_1 = drive.trajectoryBuilder(traj2_0.end())
@@ -67,7 +67,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj2_3 = drive.trajectoryBuilder(traj2_2.end())
-                .lineToLinearHeading(new Pose2d(25, 34, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(25, 30, Math.toRadians(-90)))
                 .build();
 
         traj2_4 = drive.trajectoryBuilder(traj2_3.end())
@@ -80,7 +80,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
 
         //stanga
         traj3_0 = drive.trajectoryBuilder(startPos)
-                .lineToLinearHeading(new Pose2d(20, 12.5, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(20, 11.5, Math.toRadians(0)))
                 .build();
 
         traj3_1 = drive.trajectoryBuilder(traj3_0.end())
@@ -88,7 +88,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
                 .build();
 
         traj3_2 = drive.trajectoryBuilder(new Pose2d(17, 32.5, Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(19.5, 34, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(19.5, 31, Math.toRadians(-90)))
                 .build();
 
         traj3_3 = drive.trajectoryBuilder(traj3_2.end())
@@ -116,7 +116,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
             hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             clawOpenRight();
             sleep(200);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             clawOpenRight();
             drive.followTrajectory(traj3_1);
             sleep(50);
@@ -134,7 +134,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
             hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             clawOpenRight();
             sleep(200);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             clawOpenRight();
             drive.followTrajectory(traj2_1);
             sleep(50);
@@ -145,7 +145,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
             drive.followTrajectory(traj2_3);
             sleep(200);
             placesqc(Spec.TAGA_PE_SPATE);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             sleep(100);
             drive.followTrajectory(traj2_4);
             sleep(50);
@@ -158,7 +158,7 @@ public class AlbastruBackstage extends ScheletAlbastru {
             sleep(200);
             clawOpenRight();
             sleep(100);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             clawOpenRight();
             sleep(50);
             drive.followTrajectory(traj1_2);

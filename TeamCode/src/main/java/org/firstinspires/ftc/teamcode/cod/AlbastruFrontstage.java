@@ -18,7 +18,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
         if(edgepark){
             xpark = 4f;
         }else{
-            xpark = 49.5f;
+            xpark = 48.5f;
         }
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
@@ -48,7 +48,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
                 .build();
 
         traj1_4 = drive.trajectoryBuilder(traj1_3.end())
-                .lineToLinearHeading(new Pose2d(33,79,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(31.5,77,Math.toRadians(-90)))
                 .build();
 
         traj1_5 = drive.trajectoryBuilder(traj1_4.end())
@@ -77,7 +77,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
                 .build();
 
         traj2_4 = drive.trajectoryBuilder(traj2_3.end()) //stanga-dreapta pe backdrop
-                .lineToLinearHeading(new Pose2d(28, 80, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(26.5, 78, Math.toRadians(-90)))
                 .build();
 
         traj2_5 = drive.trajectoryBuilder(traj2_4.end())
@@ -110,7 +110,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
                 .build();
 
         traj3_5 = drive.trajectoryBuilder(traj3_4.end())
-                .lineToLinearHeading(new Pose2d(22, 79, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(20.5, 77, Math.toRadians(-90)))
                 .build();
 
         traj3_6 = drive.trajectoryBuilder(traj3_5.end())
@@ -141,11 +141,11 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             sleep(200);
             clawOpenRight();
             sleep(100);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             clawOpenRight();
             drive.followTrajectory(traj3_2);
             drive.followTrajectory(traj3_3);
-            sleep(6000);
+            sleep(3000);
             drive.turn(Math.toRadians(180));
             sleep(300);
             drive.followTrajectory(traj3_4);
@@ -164,7 +164,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             clawOpenRight();
             sleep(200);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             clawOpenRight();
             drive.followTrajectory(traj2_1);
             sleep(100);
@@ -178,7 +178,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             sleep(100);
             placesqc(Spec.TAGA_PE_SPATE);
             sleep(200);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             drive.followTrajectory(traj2_5);
             sleep(200);
             drive.followTrajectory(traj2_6);
@@ -192,7 +192,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             sleep(200);
             clawOpenRight();
             sleep(100);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             clawOpenRight();
             sleep(300);
             drive.followTrajectory(traj1_2);
@@ -203,7 +203,7 @@ public class AlbastruFrontstage extends ScheletAlbastru{
             sleep(300);
             placesqc(Spec.TAGA_PE_SPATE);
             sleep(300);
-            hardware.clawServoHold.setPosition(0.45f);
+            hardware.clawServoHold.setPosition(0.25f);
             drive.followTrajectory(traj1_5);
             sleep(200);
             drive.followTrajectory(traj1_6);

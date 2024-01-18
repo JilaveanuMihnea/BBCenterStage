@@ -38,7 +38,7 @@ public abstract class ScheletAlbastru extends LinearOpMode {
             "blue_tear",
     };
 
-    private static final String TFOD_MODEL_ASSET = "t.tflite";
+    private static final String TFOD_MODEL_ASSET = "meet13ianuarie.tflite";
     TfodProcessor tfod;
 
     protected void init_auto()
@@ -146,21 +146,31 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         clawOpenLeft();
     }
 
-    protected void placesqc(int ticks){
+    protected void stackGrabBlue(int ticks){
         tagaAuto(ticks, 0.4f);
         sleep(400);
-        hardware.clawServoHold.setPosition(0.67f);
-        sleep(2800);
+        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+        sleep(200);
+        tagaFixativ();
+        clawOpenRight();
+        sleep(200);
+        tagaAuto(0, 0.8f);
+    }
+
+    protected void placesqc(int ticks){
+        tagaAuto(ticks, 1f);
+        sleep(1000);
+        hardware.clawServoHold.setPosition(Spec.HOLD_PLACE);//+((hardware.tagaMotor.getCurrentPosition()-870)/8.33-30)/355);
+        sleep(600);
         tagaFixativ();
         clawOpenBoth();
-        sleep(550);
+        sleep(500);
         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
         clawOpenBoth();
-        tagaAuto(0, 0.8f);
+        tagaAuto(0, 1f);
         sleep(1500);
         clawOpenBoth();
     }
-
     protected void tagaFixativ(){
         int tagaPos = hardware.tagaMotor.getCurrentPosition();
         if(tagaPos >= 900) hardware.tagaMotor.setPower(-0.001f);

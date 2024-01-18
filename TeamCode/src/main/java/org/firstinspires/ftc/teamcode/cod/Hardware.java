@@ -50,11 +50,9 @@ public class Hardware {
         initImu();
     }
 
-    private void initSensors()
-    {
+    private void initSensors() {
         dsLeft = hardwareMap.get(DistanceSensor.class, "dsLeft");
         dsRight = hardwareMap.get(DistanceSensor.class, "dsRight");
-
     }
     private void initMotors() {
         motor[0] = setDefaultStateMotor(motor[0], "mFrontRight", DcMotorSimple.Direction.FORWARD); //0
@@ -82,6 +80,7 @@ public class Hardware {
         droneAdjustServo = hardwareMap.get(Servo.class, "droneAdjustServo");
         servoTest = hardwareMap.get(CRServo.class, "servoTest");
         servoTest2 = hardwareMap.get(CRServo.class, "servoTest2");
+
     }
 
     private void initAnal(){
