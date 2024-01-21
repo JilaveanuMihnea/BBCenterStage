@@ -24,14 +24,14 @@ public class Spec {
 
 
     // servos
-    public static float CLOSED_POS_LEFT = 0.1f;
-    public static float OPENED_POS_LEFT = 0.3f; // 0.4
-    public static float CLOSED_POS_RIGHT = 0.85f;
-    public static float OPENED_POS_RIGHT = 0.7f; // 5
+    public static float CLOSED_POS_LEFT = 0.93f;
+    public static float OPENED_POS_LEFT = 0.7f; // 0.4
+    public static float CLOSED_POS_RIGHT = 0.25f;
+    public static float OPENED_POS_RIGHT = 0.45f; // 5
 
-    public static float HOLD_ALIGN = 0.32f; // creste = mai jos +0.07 pt hold place
-    public static float HOLD_PLACE = 0.38f;
-    public static float DRONE_ADJUST = 0.04f; //creste = ridica || 355grade modifica putin !!
+    public static float HOLD_ALIGN = 0.54f; // creste = mai jos +0.07 pt hold place
+    public static float HOLD_PLACE = 0.59f;
+    public static float DRONE_ADJUST = 0.57f; //creste = ridica || 355grade modifica putin !!
     public static float DRONE_HOLD = 1f;
     public static float DRONE_LAUNCH = 0.35f;
 

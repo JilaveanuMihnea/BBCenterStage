@@ -47,10 +47,11 @@ public class autotest extends ScheletRosu {
         while(!isStarted() && !isStopRequested()){
             telemetryTfod();
         }
-
+        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN+0.02f);
         clawOpenBoth();
-        stackGrabRed(70);
-        tagaFixativ();
+        tagaAuto(78, 1f);
+        sleep(100);
+       // tagaFixativ();
         sleep(30000);
         java.util.List<Recognition> currentRecognitions = tfod.getRecognitions();
         sleep(300);

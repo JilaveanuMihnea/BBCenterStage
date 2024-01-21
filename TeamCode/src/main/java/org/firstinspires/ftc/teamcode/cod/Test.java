@@ -300,6 +300,8 @@ public class Test extends OpMode {
         }
         else if(up) hardware.tagaMotor.setPower(Spec.TAGA_SPEED);
         else if (down) hardware.tagaMotor.setPower(-Spec.TAGA_SPEED);
+        else if(up && gamepad2.left_stick_button) hardware.tagaMotor.setPower(Spec.TAGA_SPEED * 0.4f);
+        else if (down && gamepad2.left_stick_button) hardware.tagaMotor.setPower(-Spec.TAGA_SPEED * 0.4f);
         else{
             int tagaPos = hardware.tagaMotor.getCurrentPosition();
             if(tagaPos > 840) hardware.tagaMotor.setPower(-0.001f);
@@ -358,7 +360,7 @@ public class Test extends OpMode {
 
 
             if (droneAdjustState) hardware.droneAdjustServo.setPosition(Spec.DRONE_ADJUST);
-            else hardware.droneAdjustServo.setPosition(0.15f);
+            else hardware.droneAdjustServo.setPosition(0.67f);
 
             resetRB = true;
             droneAdjustState = !droneAdjustState;
