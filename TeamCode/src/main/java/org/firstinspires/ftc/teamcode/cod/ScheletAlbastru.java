@@ -47,7 +47,8 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         runTime = new ElapsedTime();
         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
-//        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
+        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
         initTfod();
     }
     private void initTfod(){
@@ -99,9 +100,10 @@ public abstract class ScheletAlbastru extends LinearOpMode {
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
+        telemetry.update();
 
     }
-    private void sliderAuto(int ticks){
+    protected void sliderAuto(int ticks){
         hardware.sliderMotor.setTargetPosition(ticks);
         hardware.sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(ticks>hardware.sliderMotor.getCurrentPosition())
@@ -109,7 +111,7 @@ public abstract class ScheletAlbastru extends LinearOpMode {
         else
             hardware.sliderMotor.setPower(Spec.SLIDER_SPEED_DOWN);
     }
-    private void tagaAuto(int ticks, float speed_multi){
+    protected void tagaAuto(int ticks, float speed_multi){
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hardware.tagaMotor.setPower(Spec.TAGA_SPEED_AUTO*speed_multi);

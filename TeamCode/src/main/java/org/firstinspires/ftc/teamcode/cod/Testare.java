@@ -26,7 +26,7 @@ public class Testare extends OpMode {
     private boolean resetdrone = false;
     public void init(){
         hardware = new Hardware(hardwareMap, false);
-        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+        hardware.clawServoHold.setPosition(0.15f);
         hardware.clawServoRight.setPosition(Spec.OPENED_POS_RIGHT);
         hardware.clawServoLeft.setPosition(Spec.OPENED_POS_LEFT);
         elapsedTime = new ElapsedTime();

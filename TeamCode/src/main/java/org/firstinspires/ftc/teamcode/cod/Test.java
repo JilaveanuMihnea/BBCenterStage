@@ -65,7 +65,7 @@ public class Test extends OpMode {
     public void init() {
 
         hardware = new Hardware(hardwareMap, false);
-        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
         hardware.clawServoRight.setPosition(Spec.OPENED_POS_RIGHT);
         hardware.clawServoLeft.setPosition(Spec.OPENED_POS_LEFT);
         hardware.droneServo.setPosition(Spec.DRONE_HOLD);
@@ -116,6 +116,8 @@ public class Test extends OpMode {
         drone(dronelnch, droneadj);
         clawHold();
         hang(hangUp, hangDown);
+        retractLeft(gamepad1.dpad_left);
+        retractRight(gamepad1.dpad_right);
 
         switch(currentState){
             case DRIVER_CONTROLLED:
@@ -136,6 +138,7 @@ public class Test extends OpMode {
                 switch(grabState){
                     case EXTEND:
                         sliderAuto(Spec.SLIDER_TICK_GRAB);
+                        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
                         if(hardware.sliderMotor.getCurrentPosition()>Spec.SLIDER_TICK_GRAB-50){
                             grabState = GRAB_MOVEMENTS.CLAW;
 
@@ -144,6 +147,7 @@ public class Test extends OpMode {
 
                     case CLAW:
                         openClaws(clawLeft, clawRight);
+                        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
                         sliderManual(sliderUp, sliderDown);
                         //todo inverseaza daca inchis = false state
                         //delay?
@@ -157,6 +161,7 @@ public class Test extends OpMode {
                         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
                         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
                         sliderAuto(0);
+                        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         if(hardware.sliderMotor.getCurrentPosition()<50){
                             currentState = STATE_MACHINE.DRIVER_CONTROLLED;
                         }
@@ -190,15 +195,10 @@ public class Test extends OpMode {
 
                     case LOWER:
 //                        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
-                        sliderAuto(0);
-
-                        if(Math.abs(hardware.sliderMotor.getCurrentPosition()) < Spec.TAGA_THRESHOLD_LOWER){
-                            tagaAuto(50);
-
-                        }else{
-                            tagaAuto(Spec.TAGA_TICK_60DEG);
-                        }
+                        sliderAuto(600);
+                        tagaAuto(50);
                         if(Math.abs(hardware.tagaMotor.getCurrentPosition()) < 50){
+                            sliderAuto(0);
                             currentState = STATE_MACHINE.DRIVER_CONTROLLED;
                         }
                         break;
@@ -320,27 +320,41 @@ public class Test extends OpMode {
     private void clawHold(){
         //todo align claw with backdrop angle
         int armPos = hardware.tagaMotor.getCurrentPosition();
-        if(armPos<=840){
-            hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
-        }else{
+        if(armPos>840){
             hardware.clawServoHold.setPosition(Spec.HOLD_PLACE+((armPos-840)/8.33-30)/355);
+
+        }else{
+            if(grabState == GRAB_MOVEMENTS.EXTEND || grabState == GRAB_MOVEMENTS.CLAW)
+                hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
+            else{
+                hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+            }
+
         }
     }
 
     private void hang(float button1, float button2){
         if(button1 > 0) {
-            hardware.servoTest.setPower(0.5f);
-            hardware.servoTest2.setPower(-0.5f);
+            hardware.mHangLeft.setPower(1f*button1);
+            hardware.mHangRight.setPower(1f*button1);
         }
         else
         if(button2 > 0) {
-            hardware.servoTest.setPower(-0.5f);
-            hardware.servoTest2.setPower(0.5f);
+            hardware.mHangLeft.setPower(-1f*button2);
+            hardware.mHangRight.setPower(-1f*button2);
         }
         else {
-            hardware.servoTest.setPower(0);
-            hardware.servoTest2.setPower(0);
+            hardware.mHangLeft.setPower(0);
+            hardware.mHangRight.setPower(0);
         }
+    }
+
+    private void retractLeft(boolean button){
+        hardware.mHangLeft.setPower(-0.2f);
+    }
+
+    private void retractRight(boolean button){
+        hardware.mHangRight.setPower(-0.2f);
     }
 
     private void drone(boolean drnlnch, boolean raise){

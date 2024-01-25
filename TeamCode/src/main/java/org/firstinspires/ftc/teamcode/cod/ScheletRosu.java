@@ -47,7 +47,8 @@ public abstract class ScheletRosu extends LinearOpMode {
         runTime = new ElapsedTime();
         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
-//        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
+        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+        hardware.droneServo.setPosition(Spec.DRONE_HOLD);
         initTfod();
     }
     private void initTfod(){
@@ -113,6 +114,8 @@ public abstract class ScheletRosu extends LinearOpMode {
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hardware.tagaMotor.setPower(Spec.TAGA_SPEED_AUTO*speed_multi);
+        if(hardware.tagaMotor.getCurrentPosition() > ticks-100)       // slow pe final, de testat daca merge
+            hardware.tagaMotor.setPower(0.2f);
     }
 
     private void clawOpen(boolean rl){

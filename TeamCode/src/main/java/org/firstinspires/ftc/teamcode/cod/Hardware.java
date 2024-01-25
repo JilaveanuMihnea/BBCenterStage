@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Hardware {
     public boolean isAuto = false;
     public DcMotor[] motor = new DcMotor[4];
-    public DcMotor sliderMotor, tagaMotor;
+    public DcMotor sliderMotor, tagaMotor, mHangLeft, mHangRight;
 
     public Servo clawServoRight, clawServoLeft, clawServoHold, droneServo, droneAdjustServo;
     public CRServo servoTest, servoTest2;
@@ -70,6 +70,11 @@ public class Hardware {
         tagaMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         tagaMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         tagaMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        mHangLeft = hardwareMap.get(DcMotor.class, "mHangLeft");
+        mHangRight = hardwareMap.get(DcMotor.class, "mHangRight");
+        mHangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mHangLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private void initServos(){
