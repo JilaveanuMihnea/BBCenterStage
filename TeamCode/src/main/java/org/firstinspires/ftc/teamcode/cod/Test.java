@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.opencv.core.Mat;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOP", group="Version1")
 public class Test extends OpMode {
@@ -14,6 +15,8 @@ public class Test extends OpMode {
 
     private ElapsedTime elapsedTime;
 
+    private boolean sliderRetract = false;
+    private boolean agataredupameci = false;
     private boolean clawStateRight = false;
     private boolean clawStateLeft = false;
     private boolean clawStateHold = false;
@@ -96,6 +99,7 @@ public class Test extends OpMode {
         //gp1 - hang
         float hangUp = gamepad1.right_trigger;
         float hangDown = gamepad1.left_trigger;
+        boolean streang = gamepad1.b;
 
         //gp2 - manual
         float sliderUp = gamepad2.right_trigger;
@@ -104,6 +108,7 @@ public class Test extends OpMode {
         boolean tagaDown = gamepad2.left_bumper;
         boolean clawLeft = gamepad2.x;
         boolean clawRight = gamepad2.b;
+        float clawHold = gamepad2.right_stick_x;
 
         //gp2 - auto
         boolean grabsqc = gamepad2.dpad_down;
@@ -114,14 +119,18 @@ public class Test extends OpMode {
         tagaManual(tagaUp, tagaDown);
         openClaws(clawLeft, clawRight);
         drone(dronelnch, droneadj);
-        clawHold();
-        hang(hangUp, hangDown);
-        retractLeft(gamepad1.dpad_left);
-        retractRight(gamepad1.dpad_right);
+        clawHold(clawHold);
+        hang(gamepad1.dpad_down, gamepad1.dpad_up, gamepad1.dpad_left, gamepad1.dpad_right, streang, gamepad1.left_bumper);
+
 
         switch(currentState){
             case DRIVER_CONTROLLED:
-                sliderManual(sliderUp, sliderDown);
+                if(sliderRetract){
+                    sliderRetract = !sliderRetract;
+                    sliderAuto(0);
+                }
+                if(!hardware.sliderMotor.isBusy())
+                    sliderManual(sliderUp, sliderDown);
                 tagaManual(tagaUp, tagaDown);
                 openClaws(clawLeft, clawRight);
                 if(grabsqc){
@@ -137,9 +146,11 @@ public class Test extends OpMode {
             case PIXEL_GRAB:
                 switch(grabState){
                     case EXTEND:
+                        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
                         sliderAuto(Spec.SLIDER_TICK_GRAB);
                         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
                         if(hardware.sliderMotor.getCurrentPosition()>Spec.SLIDER_TICK_GRAB-50){
+
                             grabState = GRAB_MOVEMENTS.CLAW;
 
                         }
@@ -151,16 +162,22 @@ public class Test extends OpMode {
                         sliderManual(sliderUp, sliderDown);
                         //todo inverseaza daca inchis = false state
                         //delay?
-                        if(clawStateLeft && clawStateRight ){
+                        if(clawStateLeft && clawStateRight){
                             telemetry.addData("aaaaaa", 1);
+                            tmr = 0;
                             grabState = GRAB_MOVEMENTS.RETRACT;
                         }
                         break;
 
                     case RETRACT:
+                        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
                         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
-                        sliderAuto(0);
+                        if(tmr==0)
+                            tmr=elapsedTime.milliseconds();
+                        if(elapsedTime.milliseconds()>tmr+150)
+                            sliderAuto(0);
+
                         hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         if(hardware.sliderMotor.getCurrentPosition()<50){
                             currentState = STATE_MACHINE.DRIVER_CONTROLLED;
@@ -172,22 +189,28 @@ public class Test extends OpMode {
             case PIXEL_PLACE:
                 switch(placeState){
                     case RAISE:
-                        tagaAuto(Spec.TAGA_TICK_60DEG);
+                        tagaAuto(Spec.TAGA_TICK_60DEG+150);
+                        sliderAuto(250);
                         if(!hardware.tagaMotor.isBusy()){
-                            //add slider raise autolevel ?
                             tmr = 0;
-
-
                             placeState = PLACE_MOVEMENTS.CLAW;
-
                         }
                         break;
 
                     case CLAW:
 //                        hardware.clawServoHold.setPosition(Spec.HOLD_PLACE);
-                        sliderManual(sliderUp, sliderDown);
                         openClaws(clawLeft, clawRight);
                         tagaManual(tagaUp, tagaDown);
+                        if(!clawStateLeft && !clawStateRight) {
+                            sliderAuto(0);
+                            if(tmr==0)
+                                tmr=elapsedTime.milliseconds();
+                            if(elapsedTime.milliseconds()>tmr+150)
+                                placeState = PLACE_MOVEMENTS.LOWER;
+
+                        }
+                        else
+                            sliderManual(sliderUp, sliderDown);
                         if(gamepad2.y){
                             placeState = PLACE_MOVEMENTS.LOWER;
                         }
@@ -199,6 +222,7 @@ public class Test extends OpMode {
                         tagaAuto(50);
                         if(Math.abs(hardware.tagaMotor.getCurrentPosition()) < 50){
                             sliderAuto(0);
+                            sliderRetract = true;
                             currentState = STATE_MACHINE.DRIVER_CONTROLLED;
                         }
                         break;
@@ -317,13 +341,14 @@ public class Test extends OpMode {
         hardware.tagaMotor.setPower(Spec.TAGA_SPEED+0.3);
     }
 
-    private void clawHold(){
+    private void clawHold(float dogus){
         //todo align claw with backdrop angle
         int armPos = hardware.tagaMotor.getCurrentPosition();
         if(armPos>840){
             hardware.clawServoHold.setPosition(Spec.HOLD_PLACE+((armPos-840)/8.33-30)/355);
 
         }else{
+//            hardware.clawServoHold.setPosition(hardware.clawServoHold.getPosition()+Math.signum(dogus)*0.01f);
             if(grabState == GRAB_MOVEMENTS.EXTEND || grabState == GRAB_MOVEMENTS.CLAW)
                 hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             else{
@@ -333,29 +358,36 @@ public class Test extends OpMode {
         }
     }
 
-    private void hang(float button1, float button2){
-        if(button1 > 0) {
-            hardware.mHangLeft.setPower(1f*button1);
-            hardware.mHangRight.setPower(1f*button1);
+    private void hang(boolean down1, boolean up1, boolean down2, boolean up2, boolean streang, boolean up){
+        if(streang){
+            agataredupameci = !agataredupameci;
         }
-        else
-        if(button2 > 0) {
-            hardware.mHangLeft.setPower(-1f*button2);
-            hardware.mHangRight.setPower(-1f*button2);
+        if(agataredupameci){
+            hardware.mHangLeft.setPower(-0.3f);
+            hardware.mHangRight.setPower(-0.3f);
+            return;
         }
-        else {
-            hardware.mHangLeft.setPower(0);
-            hardware.mHangRight.setPower(0);
+        if(down1){
+            hardware.mHangRight.setPower(0.7f);
+        }else if(up1){
+            hardware.mHangRight.setPower(-1f);
+        }else{
+            hardware.mHangRight.setPower(0f);
+        }
+        if(down2){
+            hardware.mHangLeft.setPower(0.7f);
+        }else if(up2){
+            hardware.mHangLeft.setPower(-1f);
+        }else{
+            hardware.mHangLeft.setPower(0f);
+        }
+        if(up){
+            hardware.mHangLeft.setPower(-1f);
+            hardware.mHangRight.setPower(-1f);
         }
     }
 
-    private void retractLeft(boolean button){
-        hardware.mHangLeft.setPower(-0.2f);
-    }
 
-    private void retractRight(boolean button){
-        hardware.mHangRight.setPower(-0.2f);
-    }
 
     private void drone(boolean drnlnch, boolean raise){
         //todo find values
@@ -374,7 +406,7 @@ public class Test extends OpMode {
 
 
             if (droneAdjustState) hardware.droneAdjustServo.setPosition(Spec.DRONE_ADJUST);
-            else hardware.droneAdjustServo.setPosition(0.67f);
+            else hardware.droneAdjustServo.setPosition(0f);
 
             resetRB = true;
             droneAdjustState = !droneAdjustState;

@@ -10,18 +10,18 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomy: ALBASTRU DEPARTE", group="Autonomy")
 public class AlbastruDeparte extends ScheletAlbastru {
 
-    private Trajectory traj_test, traj_1, traj_2, traj_toboard, traj_place;
+    private Trajectory traj_test, traj_1, traj_2, traj_toboard, traj_place, traj_park, traj_park_1;
     private Pose2d startPos = new Pose2d(0, 0, Math.toRadians(0));
     private SampleMecanumDrive drive = null;
     ElapsedTime elapsedTime;
 
-    private double[][] mvgl =   { {33.5, -13.01, -90, 19, 25, -90}, {48, 2, 180, 24, 25, -90}, {46, -12, 180, 29, 25, -90}};
+    private double[][] mvgl =   { {33.5, -13.01, -90, 20, 25, -90}, {48, 2, 180, 25, 25, -90}, {46, -13.01, 180, 33, 25, -90}};
     private double[] dus = {3, 25, 60};
     private double[] intors = {3, 25, 60};
     private double[] stack = {27.3 ,40, 52};
     private double dusX, intorsX, stackX;
 
-    private double xpark = 2;
+    private double xpark = 52;
 
 
     private void options(int d, int i, int s){
@@ -50,13 +50,13 @@ public class AlbastruDeparte extends ScheletAlbastru {
                     sliderAuto(1150-70*c-(c==2?90:0));
                 })
                 .addTemporalMarker(0.2, () -> {
-                    tagaAuto(70, 0.5f);
+                    tagaAuto(100, 0.5f);
                     hardware.clawServoRight.setPosition(0.6f);
                 })
                 .build();
 
-        traj_2 = drive.trajectoryBuilder(new Pose2d(53.5, mvgl[c][1], Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(53.5, -12, Math.toRadians(-90)))
+        traj_2 = drive.trajectoryBuilder(new Pose2d(54.5, mvgl[c][1], Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(54.8, -14, Math.toRadians(-90)))
                 .build();
 
         traj_toboard = drive.trajectoryBuilder(traj_2.end())
@@ -67,7 +67,7 @@ public class AlbastruDeparte extends ScheletAlbastru {
                 .build();
 
         traj_place = drive.trajectoryBuilder(traj_toboard.end())
-                .lineToLinearHeading(new Pose2d(mvgl[c][3], 81, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(mvgl[c][3], 80.5, Math.toRadians(-90)))
                 .addTemporalMarker(0.1, () -> {
                     tagaAuto(Spec.TAGA_PE_SPATE, 1f);
                     hardware.clawServoHold.setPosition(Spec.HOLD_PLACE+((1400-840)/8.33-30)/355);
@@ -76,6 +76,22 @@ public class AlbastruDeparte extends ScheletAlbastru {
                     hardware.clawServoHold.setPosition(Spec.HOLD_PLACE+((1400-840)/8.33-30)/355);
                 })
                 .build();
+
+        traj_park = drive.trajectoryBuilder(traj_place.end())
+                .lineToLinearHeading(new Pose2d(xpark, 76, Math.toRadians(-90)))
+                .addTemporalMarker(0.1, () ->{
+                    tagaAuto(Spec.TAGA_TICK_60DEG, 1f);
+                    sliderAuto(600);
+                })
+                .build();
+
+        traj_park_1 = drive.trajectoryBuilder(traj_park.end())
+                .lineToLinearHeading(new Pose2d(xpark, 88, Math.toRadians(-90)))
+                .addTemporalMarker(0.1, () ->{
+                    tagaAuto(0, 0.5f);
+                })
+                .build();
+
     }
 
 
@@ -120,7 +136,7 @@ public class AlbastruDeparte extends ScheletAlbastru {
         drive.followTrajectory(traj_1);
         sleep(100);
         if(c!=0)
-            drive.turn(Math.toRadians(90));
+            drive.turn(Math.toRadians(-90));
         sleep(100);
         drive.followTrajectory(traj_2);
         sleep(300);
@@ -132,7 +148,17 @@ public class AlbastruDeparte extends ScheletAlbastru {
         drive.followTrajectory(traj_toboard);
         sleep(200);
         drive.followTrajectory(traj_place);
+        sleep(100);
         clawOpenBoth();
+        sleep(100);
+        drive.followTrajectory(traj_park);
+        sleep(100);
+        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+        sleep(100);
+        drive.followTrajectory(traj_park_1);
+        sleep(600);
+        sliderAuto(0);
+        tagaAuto(0, 1f);
         sleep(30000);
 
 
