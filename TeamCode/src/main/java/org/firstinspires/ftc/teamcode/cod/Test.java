@@ -240,13 +240,8 @@ public class Test extends OpMode {
         telemetry.addData("Claw Pos",hardware.analogInput.getVoltage()/3.3 * 360);
         telemetry.update();
     }
-
     private void movement( float forward, float strafe, float rotation){
         // power applied to the robot wheel by wheel
-        if(hardware.dsLeft.getDistance(DistanceUnit.CM)<5 || hardware.dsRight.getDistance(DistanceUnit.CM)<5){
-            gamepad1.rumble(100);
-//            forward = Math.min(0, forward);
-        }
         double[] power;
         if(gamepad1.right_bumper){
             power = new double[4];
@@ -359,32 +354,7 @@ public class Test extends OpMode {
     }
 
     private void hang(boolean down1, boolean up1, boolean down2, boolean up2, boolean streang, boolean up){
-        if(streang){
-            agataredupameci = !agataredupameci;
-        }
-        if(agataredupameci){
-            hardware.mHangLeft.setPower(-0.3f);
-            hardware.mHangRight.setPower(-0.3f);
-            return;
-        }
-        if(down1){
-            hardware.mHangRight.setPower(0.7f);
-        }else if(up1){
-            hardware.mHangRight.setPower(-1f);
-        }else{
-            hardware.mHangRight.setPower(0f);
-        }
-        if(down2){
-            hardware.mHangLeft.setPower(0.7f);
-        }else if(up2){
-            hardware.mHangLeft.setPower(-1f);
-        }else{
-            hardware.mHangLeft.setPower(0f);
-        }
-        if(up){
-            hardware.mHangLeft.setPower(-1f);
-            hardware.mHangRight.setPower(-1f);
-        }
+        //o sa murim toti
     }
 
 

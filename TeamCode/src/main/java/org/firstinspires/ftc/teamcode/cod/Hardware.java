@@ -16,7 +16,7 @@ public class Hardware {
     public DcMotor sliderMotor, tagaMotor, mHangLeft, mHangRight;
 
     public Servo clawServoRight, clawServoLeft, clawServoHold, droneServo, droneAdjustServo;
-    public CRServo servoTest, servoTest2;
+    public CRServo servoHangRight, servoHangLeft;
     public AnalogInput analogInput;
 
     public DistanceSensor dsLeft, dsRight;
@@ -83,8 +83,8 @@ public class Hardware {
         clawServoHold = hardwareMap.get(Servo.class, "clawServoHold");
         droneServo = hardwareMap.get(Servo.class, "droneServo");
         droneAdjustServo = hardwareMap.get(Servo.class, "droneAdjustServo");
-        servoTest = hardwareMap.get(CRServo.class, "servoTest");
-        servoTest2 = hardwareMap.get(CRServo.class, "servoTest2");
+        servoHangRight = hardwareMap.get(CRServo.class, "servoHangRight");
+        servoHangLeft = hardwareMap.get(CRServo.class, "servoHangLeft");
 
     }
 

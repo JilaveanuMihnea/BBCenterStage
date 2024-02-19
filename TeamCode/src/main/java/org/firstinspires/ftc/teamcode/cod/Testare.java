@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Testare Glisiera", group="Version1")
 public class Testare extends OpMode {
     private Hardware hardware;
@@ -85,17 +87,34 @@ public class Testare extends OpMode {
     }
     private void movement( float forward, float strafe, float rotation){
         // power applied to the robot wheel by wheel
-        double[] power = new double[4];
-        rotation *= -1;
-        power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
-        power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
-        power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
-        power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
+        if(hardware.dsLeft.getDistance(DistanceUnit.CM)<5 || hardware.dsRight.getDistance(DistanceUnit.CM)<5){
+            gamepad1.rumble(100);
+//            forward = Math.min(0, forward);
+        }
+        double[] power;
+        if(gamepad1.right_bumper){
+            power = new double[4];
+            rotation *= -1;
+            power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //+
+            power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //-
+            power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //-
+            power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED * 0.4f;   //+
+            // applying the power
+        }
+        else {
+            power = new double[4];
+            rotation *= -1;
+            power[0] = (-forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //+
+            power[1] = (+forward + strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
+            power[2] = (-forward - strafe + rotation) * Spec.MOVEMENT_SPEED;   //-
+            power[3] = (+forward - strafe + rotation) * Spec.MOVEMENT_SPEED;
+        }//+
         // applying the power
         for (int i = 0; i < 4; i++) {
             hardware.motor[i].setPower(power[i]);
         }
     }
+
     private void drone(boolean button){
         //todo find values
         if (!resetdrone && button) {
