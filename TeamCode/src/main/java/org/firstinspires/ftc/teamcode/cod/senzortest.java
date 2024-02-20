@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="senzortest", group="Version1")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="hangTest", group="Version1")
 public class senzortest extends OpMode{
     private Hardware hardware;
 
@@ -29,6 +29,19 @@ public class senzortest extends OpMode{
 //        }else{
 //            hardware.clawServoHold.setPosition(1f);
 //        }
+        if(gamepad1.right_trigger > 0){
+            hardware.servoHangLeft.setPower(1f);
+            hardware.servoHangRight.setPower(-1f);
+        } else if (gamepad1.left_trigger > 0) {
+            hardware.servoHangLeft.setPower(-1f);
+            hardware.servoHangRight.setPower(1f);
+        }
+        else {
+            hardware.servoHangLeft.setPower(0f);
+            hardware.servoHangRight.setPower(0f);
+        }
 
+        }
     }
-}
+
+

@@ -170,15 +170,16 @@ public class Test extends OpMode {
                         break;
 
                     case RETRACT:
-                        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+                      //  hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
                         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
                         if(tmr==0)
                             tmr=elapsedTime.milliseconds();
-                        if(elapsedTime.milliseconds()>tmr+150)
+                        if(elapsedTime.milliseconds()>tmr+300) {
                             sliderAuto(0);
-
-                        hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+                           // hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
+                        }
+                      //  hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         if(hardware.sliderMotor.getCurrentPosition()<50){
                             currentState = STATE_MACHINE.DRIVER_CONTROLLED;
                         }
@@ -205,8 +206,10 @@ public class Test extends OpMode {
                             sliderAuto(0);
                             if(tmr==0)
                                 tmr=elapsedTime.milliseconds();
-                            if(elapsedTime.milliseconds()>tmr+150)
+                            if(elapsedTime.milliseconds()>tmr+150) {
                                 placeState = PLACE_MOVEMENTS.LOWER;
+                                tmr = 0;
+                            }
 
                         }
                         else
@@ -218,8 +221,12 @@ public class Test extends OpMode {
 
                     case LOWER:
 //                        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
-                        sliderAuto(600);
-                        tagaAuto(50);
+                        sliderAuto(300);
+
+                        if(tmr==0)
+                            tmr=elapsedTime.milliseconds();
+                        if(elapsedTime.milliseconds()>tmr+150)
+                            tagaAuto(50);
                         if(Math.abs(hardware.tagaMotor.getCurrentPosition()) < 50){
                             sliderAuto(0);
                             sliderRetract = true;
@@ -333,7 +340,7 @@ public class Test extends OpMode {
         hardware.tagaMotor.setPower(0f);
         hardware.tagaMotor.setTargetPosition(ticks);
         hardware.tagaMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hardware.tagaMotor.setPower(Spec.TAGA_SPEED+0.3);
+        hardware.tagaMotor.setPower(Spec.TAGA_SPEED+0.5);
     }
 
     private void clawHold(float dogus){
@@ -344,7 +351,7 @@ public class Test extends OpMode {
 
         }else{
 //            hardware.clawServoHold.setPosition(hardware.clawServoHold.getPosition()+Math.signum(dogus)*0.01f);
-            if(grabState == GRAB_MOVEMENTS.EXTEND || grabState == GRAB_MOVEMENTS.CLAW)
+            if(grabState == GRAB_MOVEMENTS.EXTEND || grabState == GRAB_MOVEMENTS.CLAW || (grabState == GRAB_MOVEMENTS.RETRACT && Math.abs(hardware.sliderMotor.getCurrentPosition()) > 200))
                 hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             else{
                 hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);

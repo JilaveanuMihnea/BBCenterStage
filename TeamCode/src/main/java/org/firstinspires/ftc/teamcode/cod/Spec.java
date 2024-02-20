@@ -11,7 +11,7 @@ public class Spec {
     public static float TAGA_SPEED = 0.3f;
     public static float TAGA_SPEED_AUTO = 0.6f;
     public static float SLIDER_SPEED_UP = 1f;
-    public static float SLIDER_SPEED_DOWN = 0.8f;
+    public static float SLIDER_SPEED_DOWN = 0.9f;
 
 
     //systems movement
@@ -27,7 +27,7 @@ public class Spec {
     // servos
     public static float CLOSED_POS_LEFT = 0.93f;
     public static float OPENED_POS_LEFT = 0.6f; // 0.4
-    public static float CLOSED_POS_RIGHT = 0.25f;
+    public static float CLOSED_POS_RIGHT = 0.15f;
     public static float OPENED_POS_RIGHT = 0.55f; // 5
 
     public static float HOLD_ALIGN = 0.2f; // creste = mai jos +0.07 pt hold place
