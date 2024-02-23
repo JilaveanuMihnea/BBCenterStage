@@ -20,16 +20,19 @@ public class Test extends OpMode {
     private boolean clawStateRight = false;
     private boolean clawStateLeft = false;
     private boolean clawStateHold = false;
+    private boolean clawStateSafe = false;
     private boolean droneState = false;
     private boolean droneLaunchState = false;
     private boolean droneAdjustState = false;
-
+    private boolean resetY = false;
     private boolean resetA = false;
     private boolean resetB = false;
     private boolean resetsq = false;
     private boolean resetdrone = false;
     private boolean resetLB = false;
     private boolean resetRB = false;
+
+    private boolean resetDogus = false;
 
     private double tmr = 0;
 
@@ -39,6 +42,9 @@ public class Test extends OpMode {
     private double lastTimedrone;
     private double lastTimeLB;
     private double lastTimeRB;
+    private double lastTimeY;
+
+    private double lastTimeDogus;
 
 
     private enum STATE_MACHINE
@@ -87,7 +93,8 @@ public class Test extends OpMode {
 //        float lrotation = gamepad1.left_trigger;
 //        float rrotation = gamepad1.right_trigger;
 //        float rotation = rrotation-lrotation;
-        //gp1 - movement
+
+        // gp1 - movement
         float forward = gamepad1.left_stick_y;
         float strafe = -gamepad1.left_stick_x;
         float rotation = gamepad1.right_stick_x;
@@ -108,7 +115,8 @@ public class Test extends OpMode {
         boolean tagaDown = gamepad2.left_bumper;
         boolean clawLeft = gamepad2.x;
         boolean clawRight = gamepad2.b;
-        float clawHold = gamepad2.right_stick_x;
+        boolean clawBoth = gamepad2.y;
+        boolean clawHold = gamepad2.a;
 
         //gp2 - auto
         boolean grabsqc = gamepad2.dpad_down;
@@ -117,11 +125,10 @@ public class Test extends OpMode {
         movement(forward, strafe, rotation);
         timers();
         tagaManual(tagaUp, tagaDown);
-        openClaws(clawLeft, clawRight);
+        //openClaws(clawLeft, clawRight);
         drone(dronelnch, droneadj);
         clawHold(clawHold);
-        hang(gamepad1.dpad_down, gamepad1.dpad_up, gamepad1.dpad_left, gamepad1.dpad_right, streang, gamepad1.left_bumper);
-
+        hang(gamepad1.right_trigger, gamepad1.left_trigger, gamepad2.left_stick_y, gamepad2.right_stick_y);
 
         switch(currentState){
             case DRIVER_CONTROLLED:
@@ -132,7 +139,7 @@ public class Test extends OpMode {
                 if(!hardware.sliderMotor.isBusy())
                     sliderManual(sliderUp, sliderDown);
                 tagaManual(tagaUp, tagaDown);
-                openClaws(clawLeft, clawRight);
+                openClaws(clawLeft, clawRight, clawBoth);
                 if(grabsqc){
                     grabState = GRAB_MOVEMENTS.EXTEND;
                     currentState = STATE_MACHINE.PIXEL_GRAB;
@@ -157,7 +164,7 @@ public class Test extends OpMode {
                         break;
 
                     case CLAW:
-                        openClaws(clawLeft, clawRight);
+                        openClaws(clawLeft, clawRight, clawBoth);
                         hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
                         sliderManual(sliderUp, sliderDown);
                         //todo inverseaza daca inchis = false state
@@ -170,12 +177,14 @@ public class Test extends OpMode {
                         break;
 
                     case RETRACT:
+
                       //  hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
                         hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
+
                         if(tmr==0)
                             tmr=elapsedTime.milliseconds();
-                        if(elapsedTime.milliseconds()>tmr+300) {
+                        if(elapsedTime.milliseconds()>tmr+120) {
                             sliderAuto(0);
                            // hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
                         }
@@ -200,7 +209,7 @@ public class Test extends OpMode {
 
                     case CLAW:
 //                        hardware.clawServoHold.setPosition(Spec.HOLD_PLACE);
-                        openClaws(clawLeft, clawRight);
+                        openClaws(clawRight, clawLeft, clawBoth);
                         tagaManual(tagaUp, tagaDown);
                         if(!clawStateLeft && !clawStateRight) {
                             sliderAuto(0);
@@ -214,19 +223,19 @@ public class Test extends OpMode {
                         }
                         else
                             sliderManual(sliderUp, sliderDown);
-                        if(gamepad2.y){
-                            placeState = PLACE_MOVEMENTS.LOWER;
-                        }
                         break;
 
                     case LOWER:
 //                        hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
-                        sliderAuto(300);
+
 
                         if(tmr==0)
                             tmr=elapsedTime.milliseconds();
                         if(elapsedTime.milliseconds()>tmr+150)
                             tagaAuto(50);
+                        clawStateSafe = false;
+
+
                         if(Math.abs(hardware.tagaMotor.getCurrentPosition()) < 50){
                             sliderAuto(0);
                             sliderRetract = true;
@@ -273,13 +282,12 @@ public class Test extends OpMode {
         }
     }
 
-    private void openClaws(boolean button1, boolean button2) {
+    private void openClaws(boolean button1, boolean button2, boolean button3) {
         if (!resetA && button1) {
 
 
             if (clawStateLeft) hardware.clawServoLeft.setPosition(Spec.OPENED_POS_LEFT);
             else hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
-
             resetA = true;
             clawStateLeft = !clawStateLeft;
             lastTimeA = elapsedTime.milliseconds();
@@ -291,6 +299,17 @@ public class Test extends OpMode {
             resetB = true;
             clawStateRight = !clawStateRight;
             lastTimeB = elapsedTime.milliseconds();
+        }
+        if (!resetY && button3) {
+            if (clawStateRight) hardware.clawServoRight.setPosition(Spec.OPENED_POS_RIGHT);
+            else hardware.clawServoRight.setPosition(Spec.CLOSED_POS_RIGHT);
+            if (clawStateLeft) hardware.clawServoLeft.setPosition(Spec.OPENED_POS_LEFT);
+            else hardware.clawServoLeft.setPosition(Spec.CLOSED_POS_LEFT);
+
+            resetY = true;
+            clawStateRight = !clawStateRight;
+            clawStateLeft = !clawStateLeft;
+            lastTimeY = elapsedTime.milliseconds();
         }
     }
 
@@ -343,15 +362,26 @@ public class Test extends OpMode {
         hardware.tagaMotor.setPower(Spec.TAGA_SPEED+0.5);
     }
 
-    private void clawHold(float dogus){
+
+    private void clawHold(boolean dogus){
         //todo align claw with backdrop angle
         int armPos = hardware.tagaMotor.getCurrentPosition();
-        if(armPos>840){
+        if ( !resetDogus && dogus && (grabState != GRAB_MOVEMENTS.EXTEND || grabState != GRAB_MOVEMENTS.CLAW || grabState != GRAB_MOVEMENTS.RETRACT )) {
+            clawStateSafe = !clawStateSafe;
+
+            resetDogus = true;
+            lastTimeDogus = elapsedTime.milliseconds();
+        }
+        if (clawStateSafe){
+            hardware.clawServoHold.setPosition(0.1f);
+            //clawStateSafe = !clawStateSafe;
+        }
+        else if(armPos>840){
             hardware.clawServoHold.setPosition(Spec.HOLD_PLACE+((armPos-840)/8.33-30)/355);
 
         }else{
 //            hardware.clawServoHold.setPosition(hardware.clawServoHold.getPosition()+Math.signum(dogus)*0.01f);
-            if(grabState == GRAB_MOVEMENTS.EXTEND || grabState == GRAB_MOVEMENTS.CLAW || (grabState == GRAB_MOVEMENTS.RETRACT && Math.abs(hardware.sliderMotor.getCurrentPosition()) > 200))
+            if(grabState == GRAB_MOVEMENTS.EXTEND || grabState == GRAB_MOVEMENTS.CLAW || (grabState == GRAB_MOVEMENTS.RETRACT && Math.abs(hardware.sliderMotor.getCurrentPosition()) > 300))
                 hardware.clawServoHold.setPosition(Spec.HOLD_ALIGN);
             else{
                 hardware.clawServoHold.setPosition(Spec.HOLD_SAFE);
@@ -360,8 +390,23 @@ public class Test extends OpMode {
         }
     }
 
-    private void hang(boolean down1, boolean up1, boolean down2, boolean up2, boolean streang, boolean up){
-        //o sa murim toti
+    private void hang(float button1, float button2, float button3, float button4){
+        if(button1 > 0){
+            hardware.servoHangLeft.setPower(-1f);
+            hardware.servoHangRight.setPower(1f);
+        } else if (button2 > 0) {
+            hardware.servoHangLeft.setPower(1f);
+            hardware.servoHangRight.setPower(-1f);
+        } else if (button3 != 0) {
+            hardware.servoHangLeft.setPower(-button3);
+            hardware.servoHangRight.setPower(0);
+        } else if (button4 != 0) {
+            hardware.servoHangRight.setPower(button4);
+            hardware.servoHangLeft.setPower(0);
+        } else {
+            hardware.servoHangLeft.setPower(0f);
+            hardware.servoHangRight.setPower(0f);
+        }
     }
 
 
@@ -381,7 +426,6 @@ public class Test extends OpMode {
 
         if (!resetRB && raise) {
 
-
             if (droneAdjustState) hardware.droneAdjustServo.setPosition(Spec.DRONE_ADJUST);
             else hardware.droneAdjustServo.setPosition(0f);
 
@@ -399,5 +443,7 @@ public class Test extends OpMode {
         if(resetdrone && elapsedTime.milliseconds() > lastTimedrone + Spec.BUTTON_DELAY) resetdrone = false;
         if(resetLB && elapsedTime.milliseconds() > lastTimeLB + Spec.BUTTON_DELAY)  resetLB = false;
         if(resetRB && elapsedTime.milliseconds() > lastTimeRB + Spec.BUTTON_DELAY)  resetRB = false;
+        if(resetY && elapsedTime.milliseconds() > lastTimeY + Spec.BUTTON_DELAY) resetY = false;
+        if(resetDogus && elapsedTime.milliseconds() > lastTimeDogus + Spec.BUTTON_DELAY) resetDogus = false;
     }
 }

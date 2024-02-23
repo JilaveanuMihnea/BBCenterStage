@@ -15,13 +15,13 @@ public class autotest extends ScheletRosu {
     private SampleMecanumDrive drive = null;
     ElapsedTime elapsedTime;
 
-    private double[][] mvgl =   {{29, -8, 90, 32, -26, 90}, {19, 0, 0, 27, -28, 90}, {16, -12, 0, 20, -27, 90}};
-    private double[] dus = {3, 25, 60};
-    private double[] intors = {3, 25, 60};
-    private double[] stack = {27 , 40, 52};
+    private double[][] mvgl =   {{30, -8, 90, 30, -25, 90}, {19, 0, 0, 27, -28, 90}, {16, -12, 0, 20, -27, 90}};
+    private double[] dus = {5, 25, 60};
+    private double[] intors = {5, 25, 60};
+    private double[] stack = {28 , 40, 52};
     private double dusX, intorsX, stackX;
 
-    private double xpark = 1;
+    private double xpark = 5;
 
 
     private void options(int d, int i, int s){
@@ -62,14 +62,14 @@ public class autotest extends ScheletRosu {
                 })
                 .build();
         traj_gate_front_1_1 = drive.trajectoryBuilder(traj_gate_front_1.end())
-                .lineToLinearHeading(new Pose2d(dusX, 64.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(dusX, 64, Math.toRadians(90)))
                 .addTemporalMarker(0.1, () -> {
                     sliderAuto(0);
                 })
                 .addTemporalMarker(1, () -> {
                     tagaAuto(60, 0.5f);
                     sliderAuto(760);
-                    hardware.clawServoRight.setPosition(0.6f);
+                    hardware.clawServoRight.setPosition(0.8f);
                 })
                 .build();
 
@@ -85,7 +85,7 @@ public class autotest extends ScheletRosu {
 //                .build();
 
         traj_stack_1_1= drive.trajectoryBuilder(traj_gate_front_1_1.end())
-                .lineToLinearHeading(new Pose2d(stackX-2,64.5,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(stackX-2,64,Math.toRadians(90)))
 //                .addTemporalMarker(0.1, () -> {
 //                    tagaAuto(70, 0.5f);
 //                })
@@ -118,7 +118,7 @@ public class autotest extends ScheletRosu {
         traj_end = drive.trajectoryBuilder(traj_gate_back_1_1.end())
                 .lineToLinearHeading(new Pose2d(27, -36.5, Math.toRadians(90)))
                 .addTemporalMarker(0.1, () -> {
-                    tagaAuto(Spec.TAGA_TICK_60DEG+200, 0.7f);
+                    tagaAuto(Spec.TAGA_TICK_60DEG+230, 0.7f);
                     hardware.clawServoHold.setPosition(Spec.HOLD_PLACE+((1250-840)/8.33-30)/355);
                 })
                 .build();

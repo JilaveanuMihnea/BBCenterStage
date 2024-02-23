@@ -125,10 +125,10 @@ public class RosuAproape extends ScheletRosu {
 
         traj_park = drive.trajectoryBuilder(traj_1.end())
                 .lineToLinearHeading(new Pose2d(xpark, -30, Math.toRadians(90)))
-                .addTemporalMarker(0.1, () -> {
+                .addTemporalMarker(0.3, () -> {
                     sliderAuto(600);
                 })
-                .addTemporalMarker(0.2, ()->{
+                .addTemporalMarker(0.3, ()->{
                     tagaAuto(0, 0.7f);
                 })
                 .build();
